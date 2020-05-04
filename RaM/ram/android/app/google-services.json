@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "127307809718",
+    "firebase_url": "https://r-a-m-648a8.firebaseio.com",
+    "project_id": "r-a-m-648a8",
+    "storage_bucket": "r-a-m-648a8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127307809718:android:9969c0f103c01932287717",
+        "android_client_info": {
+          "package_name": "com.fenris.ram"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "127307809718-qlotmjp2rcjbjdh30g35lcpretpo1c4f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtO6NjSDbun5yqzYl2_C2cgSbzEx21GpA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "127307809718-qlotmjp2rcjbjdh30g35lcpretpo1c4f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
