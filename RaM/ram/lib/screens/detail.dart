@@ -22,7 +22,7 @@ class MovieDetail extends StatelessWidget {
             child: Container(
               child: Column(
                 children: <Widget>[
-                  Image.network(movieNotifier.currentMovie.image,
+                  Image.network(movieNotifier.currentMovie.image== null ? 'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg' :movieNotifier.currentMovie.image ,
                   ),
                   SizedBox(height: 32,),
                   Center(

@@ -38,30 +38,34 @@ class _MovieListState extends State<MovieList> {
             ),
             
           ),
-          body: ListView.separated(
-            itemBuilder: (BuildContext context, int index){
-              return ListTile(
-                leading : Image.network(
-                  movieNotifier.movieList[index].image!= null ? movieNotifier.movieList[index].image : 'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
-                width:120 ,
-                fit:  BoxFit.fitWidth,),
-                title: Text(movieNotifier.movieList[index].name,
-                style: TextStyle(color: Colors.blue)),
-                subtitle: Text(movieNotifier.movieList[index].category,
-                style: TextStyle(color: Colors.blue)),
-                onTap: (){
-                  movieNotifier.currentMovie = movieNotifier.movieList[index];
-                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context ){
-                    return MovieDetail();
-                  }));
-                },
-              );
-            },
-            itemCount: movieNotifier.movieList.length,
-            separatorBuilder: (BuildContext context, int index){
-              return Divider(
-                color: Colors.white,
-              );
+          body: RefreshIndicator(
+            child: ListView.separated(
+              itemBuilder: (BuildContext context, int index){
+                return ListTile(
+                  leading : Image.network(
+                    movieNotifier.movieList[index].image!= null ? movieNotifier.movieList[index].image : 'https://www.testingxperts.com/wp-content/uploads/2019/02/placeholder-img.jpg',
+                  width:120 ,
+                  fit:  BoxFit.fitWidth,),
+                  title: Text(movieNotifier.movieList[index].name,
+                  style: TextStyle(color: Colors.blue)),
+                  subtitle: Text(movieNotifier.movieList[index].category,
+                  style: TextStyle(color: Colors.blue)),
+                  onTap: (){
+                    movieNotifier.currentMovie = movieNotifier.movieList[index];
+                    Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context ){
+                      return MovieDetail();
+                    }));
+                  },
+                );
+              },
+              itemCount: movieNotifier.movieList.length,
+              separatorBuilder: (BuildContext context, int index){
+                return Divider(
+                  color: Colors.white,
+                );
+              },
+            ), onRefresh: () {
+              
             },
           ),
           floatingActionButton: FloatingActionButton(
