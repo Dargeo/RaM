@@ -22,48 +22,61 @@ class _MovieListState extends State<MovieList> {
   @override
   Widget build(BuildContext context) {
     MovieNotifier movieNotifier = Provider.of<MovieNotifier>(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-            'RaM',          ),
+    return Stack(
+      children: <Widget>[
+        Image.asset('assets/bg.jpg',
+        height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            fit: BoxFit.cover,
         ),
-        
-      ),
-      body: ListView.separated(
-        itemBuilder: (BuildContext context, int index){
-          return ListTile(
-            leading : Image.network(movieNotifier.movieList[index].image,
-            width:120 ,
-            fit:  BoxFit.fitWidth,),
-            title: Text(movieNotifier.movieList[index].name),
-            subtitle: Text(movieNotifier.movieList[index].category),
-            onTap: (){
-              movieNotifier.currentMovie = movieNotifier.movieList[index];
-              Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context ){
-                return MovieDetail();
-              }));
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            title: Center(
+              child: Text(
+                'RaM',          ),
+            ),
+            
+          ),
+          body: ListView.separated(
+            itemBuilder: (BuildContext context, int index){
+              return ListTile(
+                leading : Image.network(movieNotifier.movieList[index].image,
+                width:120 ,
+                fit:  BoxFit.fitWidth,),
+                title: Text(movieNotifier.movieList[index].name,
+                style: TextStyle(color: Colors.blue)),
+                subtitle: Text(movieNotifier.movieList[index].category,
+                style: TextStyle(color: Colors.blue)),
+                onTap: (){
+                  movieNotifier.currentMovie = movieNotifier.movieList[index];
+                  Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context ){
+                    return MovieDetail();
+                  }));
+                },
+              );
             },
-          );
-        },
-        itemCount: movieNotifier.movieList.length,
-        separatorBuilder: (BuildContext context, int index){
-          return Divider(
-            color: Colors.black,
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (BuildContext context){
-              return MovieForm();
-            })
-          );
-        },
-        child: Icon(Icons.add),
-        foregroundColor: Colors.white,
-      ),
+            itemCount: movieNotifier.movieList.length,
+            separatorBuilder: (BuildContext context, int index){
+              return Divider(
+                color: Colors.white,
+              );
+            },
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: (){
+              movieNotifier.currentMovie =null;
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (BuildContext context){
+                  return MovieForm(isUpdating: false,);
+                }),
+              );
+            },
+            child: Icon(Icons.add),
+            foregroundColor: Colors.white,
+          ),
+        ),
+      ],
     );
   }
 }

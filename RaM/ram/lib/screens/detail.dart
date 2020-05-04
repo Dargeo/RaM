@@ -45,11 +45,11 @@ class MovieDetail extends StatelessWidget {
         onPressed: (){
           Navigator.of(context).push(
             MaterialPageRoute(builder: (BuildContext context){
-              return MovieForm();
+              return MovieForm(isUpdating: true,);
             })
           );
         },
-        child: Icon(Icons.add),
+        child: Icon(Icons.edit),
         foregroundColor: Colors.white,
       ),
       );
