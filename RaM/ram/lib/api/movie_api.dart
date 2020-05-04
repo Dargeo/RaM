@@ -19,7 +19,7 @@ getMovie(MovieNotifier movieNotifier) async {
 
   movieNotifier.movieList = _movieList;
 }
-  uploadMovieAndImage(Movie movie, bool isUpdating, {File localFile})async{ 
+  uploadMovieAndImage(Movie movie, bool isUpdating, File localFile)async{ 
     if(localFile!= null){
       print('Uploading image');
 
@@ -29,6 +29,42 @@ getMovie(MovieNotifier movieNotifier) async {
       var uuid = Uuid().v4();
 
       final StorageReference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child('movies/images/');
+        FirebaseStorage.instance.ref().child('movies/images/$uuid$filExtension');
+
+        await firebaseStorageRef.putFile(localFile).onComplete.catchError(
+          (onError){
+            print(onError);
+            return false;
+          }
+        );
+        String url = await firebaseStorageRef.getDownloadURL();
+        _uploadMovie(movie,isUpdating,imageUrl: url);
+        print('download url: $url');
+
+        //
+    }else{
+      print('skiping image upload'); 
+      _uploadMovie(movie,isUpdating);
     }
+  }
+  _uploadMovie(Movie movie, bool isUpdating, {String imageUrl})async {
+    CollectionReference movieRef = Firestore.instance.collection('movies');
+
+    if(imageUrl != null ){
+      movie.image = imageUrl;
+    }
+
+    if(isUpdating){
+      await movieRef.document(movie.id).updateData(movie.toMap());
+      print('updated movie with id: ${movie.id}');
+    }else{
+      DocumentReference documentRef = await movieRef.add(movie.toMap());
+
+      movie.id = documentRef.documentID;
+
+      print('uploaded movie successfully: ${movie.toString()}');
+
+      await documentRef.setData(movie.toMap(),merge: true);
+    }
+
   }

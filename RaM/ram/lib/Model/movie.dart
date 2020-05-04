@@ -20,7 +20,7 @@ Movie();
   Map<String,dynamic> toMap(){
     return {
       'id': id,
-      'name':id,
+      'name':name,
       'category':category,
       'estado':estado,
       'image':image,

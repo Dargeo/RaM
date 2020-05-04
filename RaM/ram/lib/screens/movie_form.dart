@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:ram/Model/movie.dart';
+import 'package:ram/api/movie_api.dart';
 import 'package:ram/notifier/movie_notifier.dart';
 
 class MovieForm extends StatefulWidget {
@@ -21,6 +22,8 @@ class _MovieFormState extends State<MovieForm> {
 
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   Movie _currentMovie;
+  String _currentMovieStado= 'Available';
+  String _currentMovieCategory = 'Comedy';
   final List <String> disponibilidad = ['Available','Not available'];
   final List <String> categorias =['Drama', 'Comedy','Thriller','Action','Terror','Kids'];
   String _imageUrl;
@@ -121,38 +124,48 @@ class _MovieFormState extends State<MovieForm> {
 
      Widget _buildStateField(){
     return DropdownButtonFormField(
-      value: _currentMovie.estado,
+    value: _currentMovie.estado ?? 'Available',
       items: disponibilidad.map((estado){
         return DropdownMenuItem(
           value: estado,
-          child: Text('$estado')
+          child: Text('$estado estado'),
+          
         );
       }).toList(),
-      onChanged : (value) =>
-      _currentMovie.estado = value, 
+      onChanged : (value) {
+        setState(() {
+          _currentMovie.estado = value;
+        });
+        
+      },
+       
       );
   }
       Widget _buildCategoryField(){
     return DropdownButtonFormField(
-      value: _currentMovie.category,
+      value: _currentMovie.category == null ? 'Comedy' : _currentMovie.category, 
       items: categorias.map((cat){
         return DropdownMenuItem(
-          value: cat,
+          value: cat!= null ? cat : 'Comedy',
           child: Text('$cat')
         );
       }).toList(),
-      onChanged : (value) =>
-      _currentMovie.estado = value, 
+      onChanged : (value) {setState(() {
+        _currentMovie.category = value;
+      });}
+      
+      
       );
   }
 
-  _saveFood(context){
+  _saveFood(){
+    print('savefood called ');
     if(!_formkey.currentState.validate()){
       return;
     }
     _formkey.currentState.save();
-    
-
+    print('form saved ');
+    uploadMovieAndImage(_currentMovie, widget.isUpdating,_imageFile );
     print("name: ${_currentMovie.name}");
     print("category: ${_currentMovie.category}");
     print("disponibilidad: ${_currentMovie.estado}");
@@ -196,7 +209,7 @@ class _MovieFormState extends State<MovieForm> {
           ),
         ),),
                   floatingActionButton: FloatingActionButton(
-            onPressed: ()=> _saveFood(context),
+            onPressed: ()=> _saveFood(),
 
             child: Icon(Icons.save),
             foregroundColor: Colors.white,
