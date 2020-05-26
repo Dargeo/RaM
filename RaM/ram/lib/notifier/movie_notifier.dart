@@ -19,4 +19,13 @@ class MovieNotifier with ChangeNotifier{
     _currentMovie = movie;
     notifyListeners();
   }
+  addMovie(Movie movie){
+    _movieList.insert(0,movie);
+    notifyListeners();
+  }
+
+  deleteMovie(Movie movie){
+    _movieList.removeWhere((_movie) => _movie.id == movie.id);
+    notifyListeners();
+  }
 }

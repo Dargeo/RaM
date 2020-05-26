@@ -1,9 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
+import 'package:ram/Model/movie.dart';
 import 'package:ram/notifier/movie_notifier.dart';
 import 'package:ram/screens/movie_form.dart';
-
+import 'package:ram/api/movie_api.dart';
 class MovieDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -11,8 +13,14 @@ class MovieDetail extends StatelessWidget {
     MovieNotifier movieNotifier = Provider.of<MovieNotifier>(context,listen: false);
     final List<String> sugars = ['Disponible', 'No disponible'];
 
+
+  _onMovieDelete(Movie movie){
+    
+    movieNotifier.deleteMovie(movie);
+    Navigator.of(context).pop();
+  }
       return Scaffold(
-        
+        backgroundColor: Colors.teal[100],
         appBar: AppBar(title: Text(
           movieNotifier.currentMovie.name,
           )
@@ -41,16 +49,35 @@ class MovieDetail extends StatelessWidget {
             ),
           ),
         ),
-              floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (BuildContext context){
-              return MovieForm(isUpdating: true,);
-            })
-          );
-        },
-        child: Icon(Icons.edit),
-        foregroundColor: Colors.white,
+              floatingActionButton: SpeedDial(
+                animatedIcon: AnimatedIcons.view_list,
+                overlayColor: Colors.black87,
+                backgroundColor: Colors.cyan,
+                animatedIconTheme: IconThemeData.fallback(),
+                shape: CircleBorder(),
+                children: [
+                  SpeedDialChild(
+                  child: Icon(Icons.delete),
+                  backgroundColor: Colors.red,
+                  label: 'Delete',
+                  onTap:() {
+                    deleteMovie(movieNotifier.currentMovie, _onMovieDelete);
+                    Navigator.pop(context);
+                  } 
+                ),
+                SpeedDialChild(
+                  child: Icon(Icons.edit),
+                  backgroundColor: Colors.green,
+                  label: 'Edit',
+                  onTap: (){
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (BuildContext context){
+                        return MovieForm(isUpdating: true,);
+                        })
+                      );
+                  }
+                ),
+                ],
       ),
       );
     

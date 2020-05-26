@@ -30,11 +30,16 @@ dependencies:
   firebase_storage: ^3.1.5
   path: ^1.7.0
   uuid: ^ 2.0.4
+  flutter_launcher_icons: ^0.7.5
+  flutter_speed_dial: ^1.2.1
 dev_dependencies:
   # flutter_test:
   #   sdk: flutter
 
-
+flutter_cons:
+  android: 'launcher_icon'
+  ios: true
+  image_path: 'images/image.png'
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -47,6 +52,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/bg.jpg
+    - images/image.png
 
   # To add assets to your application, add an assets section, like this:
 

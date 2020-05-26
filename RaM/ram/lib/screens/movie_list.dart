@@ -12,8 +12,12 @@ class MovieList extends StatefulWidget{
 
 
 class _MovieListState extends State<MovieList> {
+
+  GlobalKey<RefreshIndicatorState> refreshKey;
+
   @override
   void initState() {
+    refreshKey = GlobalKey<RefreshIndicatorState>();
     MovieNotifier movieNotifier = Provider.of<MovieNotifier>(context, listen: false);
     getMovie(movieNotifier);
     super.initState();
@@ -21,7 +25,15 @@ class _MovieListState extends State<MovieList> {
 
   @override
   Widget build(BuildContext context) {
+
     MovieNotifier movieNotifier = Provider.of<MovieNotifier>(context);
+Future<Null> refreshList() async {
+    await Future.delayed(Duration(seconds: 1));
+    MovieNotifier movieNotifier = Provider.of<MovieNotifier>(context, listen: false);
+    getMovie(movieNotifier);
+    return null;
+
+  }
     return Stack(
       children: <Widget>[
         Image.asset('assets/bg.jpg',
@@ -39,6 +51,7 @@ class _MovieListState extends State<MovieList> {
             
           ),
           body: RefreshIndicator(
+            key: refreshKey,
             child: ListView.separated(
               itemBuilder: (BuildContext context, int index){
                 return ListTile(
@@ -64,8 +77,8 @@ class _MovieListState extends State<MovieList> {
                   color: Colors.white,
                 );
               },
-            ), onRefresh: () {
-              
+            ), onRefresh: () async{
+              return refreshList();
             },
           ),
           floatingActionButton: FloatingActionButton(

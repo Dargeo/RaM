@@ -15,6 +15,7 @@ class MovieForm extends StatefulWidget {
 
   @override
 
+
   _MovieFormState createState() => _MovieFormState();
 }
 
@@ -36,12 +37,17 @@ class _MovieFormState extends State<MovieForm> {
  
   if(movieNotifier.currentMovie != null){
     _currentMovie = movieNotifier.currentMovie;
+    _currentMovie.estado = 'Available';
   }else{
     _currentMovie = Movie();
   }
   _imageUrl = _currentMovie.image;
  }
- 
+ _onMovieUploaded(Movie movie) {
+    MovieNotifier movieNotifier = Provider.of<MovieNotifier>(context,listen: false);
+    movieNotifier.addMovie(movie);
+    Navigator.pop(context);
+ }
  _showImage(){
     if(_imageFile== null && _imageUrl == null){
       return Text('Image placeholder');
@@ -124,7 +130,9 @@ class _MovieFormState extends State<MovieForm> {
 
      Widget _buildStateField(){
     return DropdownButtonFormField(
-    value: _currentMovie.estado ?? 'Available',
+      
+    value: _currentMovie.estado == null ? 'Available' : _currentMovie.estado ,
+    
       items: disponibilidad.map((estado){
         return DropdownMenuItem(
           value: estado,
@@ -134,7 +142,12 @@ class _MovieFormState extends State<MovieForm> {
       }).toList(),
       onChanged : (value) {
         setState(() {
-          _currentMovie.estado = value;
+          if(value != null){
+            _currentMovie.estado = value;
+          }else{
+            _currentMovie.estado = "Available";
+          }
+          
         });
         
       },
@@ -158,17 +171,18 @@ class _MovieFormState extends State<MovieForm> {
       );
   }
 
-  _saveFood(){
-    print('savefood called ');
+  _saveMovie(){
+    print('saveMovie called ');
     if(!_formkey.currentState.validate()){
       return;
     }
     _formkey.currentState.save();
     print('form saved ');
-    uploadMovieAndImage(_currentMovie, widget.isUpdating,_imageFile );
+    uploadMovieAndImage(_currentMovie, widget.isUpdating,_imageFile,_onMovieUploaded);
     print("name: ${_currentMovie.name}");
     print("category: ${_currentMovie.category}");
     print("disponibilidad: ${_currentMovie.estado}");
+    
   }
    @override
   Widget build(BuildContext context) {
@@ -202,6 +216,7 @@ class _MovieFormState extends State<MovieForm> {
 
 
               ): SizedBox(height: 0,),
+              
                 _buildNameField(),
                 _buildStateField(),
                 _buildCategoryField(),
@@ -209,7 +224,7 @@ class _MovieFormState extends State<MovieForm> {
           ),
         ),),
                   floatingActionButton: FloatingActionButton(
-            onPressed: ()=> _saveFood(),
+            onPressed: ()=> _saveMovie(),
 
             child: Icon(Icons.save),
             foregroundColor: Colors.white,
